@@ -10,7 +10,7 @@ function setup(){
     
     strokeWeightSlider = createSlider(1,10,5,1);
     
-    bgColourPicker = createColorPicker('gray'); 
+    bgColourPicker = createColorPicker('white'); 
     
     var bgColorButton = createButton('Refresh');
     bgColorButton.mousePressed(repaint);
