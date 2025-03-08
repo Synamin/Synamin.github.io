@@ -1,63 +1,69 @@
-var redBrick = {
-    x: 0,
-    y: 0,
-    w: 30,
-    h: 30,
-    xSpeed: 1,
-    ySpeed: 1,
-    colour: 'red',
-    draw: function(){
-        fill( this.colour );
-        rect(this.x, this.y, this.w, this.h);
-    },
-    move: function(){
-        this.x += this.xSpeed;
-        this.y += this.ySpeed;
+let input, button, slider, output, mode, fullscreenButton;
+        
+function setup() {
+    createCanvas(600, 400);
+    background('pink');
+    
+    input = createInput("Type here...");
+    input.position(20, 420);
+    
+    button = createButton("Submit");
+    button.position(input.x + input.width + 10, 420);
+    button.mousePressed(displayText);
+    
+    slider = createSlider(10, 50, 20);
+    slider.position(20, 450);
+    slider.input(changeTextSize);
+    
+    mode = createSelect();
+    mode.position(20, 480);
+    mode.option("Normal");
+    mode.option("Excited");
+    mode.option("Mysterious");
+    mode.changed(changeMode);
 
-        if(this.x < 0 || this.x > width - this.w){
-            this.xSpeed *= -1;
-        }
-        if(this.y > height - this.h || this.y < 0){
-            this.ySpeed *= -1;
-        }
-    }
-};
+    fullscreenButton = createButton("Toggle Fullscreen");
+    fullscreenButton.position(20, 510);
+    fullscreenButton.mousePressed(toggleFullscreen);
 
-var blueBrick = {
-    x: 40,
-    y: 50,
-    w: 30,
-    h: 30,
-    xSpeed: 2,
-    ySpeed: 1,
-    colour: 'blue',
-    draw: function(){
-        fill( this.colour );
-        rect(this.x, this.y, this.w, this.h);
-    },
-    move: function(){
-        this.x += this.xSpeed;
-        this.y += this.ySpeed;
-
-        if(this.x < 0 || this.x > width){
-            this.xSpeed *= -1;
-        }
-        if(this.y > height || this.y < 0){
-            this.ySpeed *= -1;
-        }
-    }
-};
-// redBrick.x++ returns current value then increments
-// ++redBrick.x increments value and then returns   
-
-function setup(){
-    createCanvas(720,280);
+    output = "";
 }
 
-function draw(){
-    background('grey'); 
-    redBrick.draw();
-    redBrick.move();
-    blueBrick.draw();
-    blueBrick.move();
+function displayText() {
+    output = input.value();
+    input.value("");
+}
+
+function changeTextSize() {
+    textSize(slider.value());
+}
+
+function changeMode() {
+    let selectedMode = mode.value();
+    if (selectedMode === "Excited") {
+        output = output.toUpperCase() + "!!!";
+    } else if (selectedMode === "Mysterious") {
+        output = "..." + output + "...";
+    }
+}
+
+function toggleFullscreen() {
+    let fs = fullscreen();
+    fullscreen(!fs);
+}
+
+function draw() {
+    background('pink');
+    textSize(slider.value());
+    fill(50);
+    text(output, width / 2 - textWidth(output) / 2, height / 2);
+}
+
+function keyPressed() {
+    if (keyCode === ENTER) {
+        displayText();
+    }
+    if (keyCode === ESCAPE) {
+        fullscreen(false);
+    }
 }
